@@ -12,12 +12,15 @@ app.use((req, res) => {
   let reqKeys = Object.keys(req.headers);
   reqKeys.sort();
 
+  let reqProps = ['httpVersion', 'method', 'originalUrl', 'params', 'query', 'url'];
+  reqProps.sort();
+
   const reqEntries = (
     <div id="wrapper">
       <table>
         <thead>
           <tr>
-            <th className="key">req.headers prop</th>
+            <th className="key">req.headers item</th>
             <th>Value</th>
           </tr>
         </thead>
@@ -34,30 +37,14 @@ app.use((req, res) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="key">httpVersion</td>
-            <td>{req.httpVersion}</td>
-          </tr>
-          <tr>
-            <td className="key">method</td>
-            <td>{req.method}</td>
-          </tr>
-          <tr>
-            <td className="key">originalUrl</td>
-            <td>{req.originalUrl}</td>
-          </tr>
-          <tr>
-            <td className="key">params</td>
-            <td>json: {JSON.stringify(req.params)}</td>
-          </tr>
-          <tr>
-            <td className="key">query</td>
-            <td>json: {JSON.stringify(req.query)}</td>
-          </tr>
-          <tr>
-            <td className="key">url</td>
-            <td>{req.url}</td>
-          </tr>
+         { 
+           reqProps.map((item, i) => (
+             <tr key={i}><td className="key">{item}</td>
+               <td>{ typeof(req[item]) === 'undefined' ? '' : 
+                       (typeof(req[item]) !== 'object' ? (typeof(req[item]) !== 'boolean' ? req[item] : (req[item] ? 'true' : 'false')) : 'json: ' + JSON.stringify(req[item])) 
+               }</td>
+             </tr>)) 
+         }
         </tbody>
       </table>
     </div>
