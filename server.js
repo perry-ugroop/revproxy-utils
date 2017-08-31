@@ -8,7 +8,7 @@ const config = jsonfile.readFileSync('./config.json');
 const app = express();
 app.use(express.static(`${__dirname}/assets`));
 
-app.use((req, res) => {
+app.use((req, res, next) => {
   let reqKeys = Object.keys(req.headers);
   reqKeys.sort();
 
@@ -50,7 +50,10 @@ app.use((req, res) => {
     </div>
   );
 
+  res.set({ 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Expires': 0 });
   res.send(util.toHtml(reqEntries));
+
+  return next();
 });
 
 console.log(`Listening on port ${config.port}...`);
