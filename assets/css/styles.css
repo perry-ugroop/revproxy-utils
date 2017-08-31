@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  padding: 4px;
+  font-family: sans-serif;
+}
+
+table tr > td, table tr > th {
+  margin: 0;
+  padding: 2px 4px;
+  border: solid 1px #c0c0c0;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  width: 90%;
+  margin-bottom: 1em;
+}
+
+table th {
+  text-align: left;
+}
+
+table tr .key {
+  width: 25%;
+}

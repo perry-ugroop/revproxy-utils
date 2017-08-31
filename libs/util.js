@@ -1,8 +1,18 @@
 import ReactDOMServer from 'react-dom/server';
+import fs from 'fs';
 
-const util = {
-  toHtml: (jsx) => `<!DOCTYPE html><html><head><meta charset="utf-8" /><title>revproxy-utils</title></head><body>${ReactDOMServer.renderToString(jsx)}</body></html>`,
+
+class Util {
+  bufferedHtml = null;
+
+  toHtml = (jsx) => {
+    if(this.bufferedHtml === null) {
+      this.bufferedHtml = fs.readFileSync(`${__dirname}/../template.html.tpl`, { encoding: 'utf8' });
+    }
+
+    return this.bufferedHtml.replace('</body>', ReactDOMServer.renderToString(jsx) + '</body>');
+  }
 }
 
-export default util;
+export default new Util();
 

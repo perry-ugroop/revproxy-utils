@@ -6,25 +6,56 @@ import util from './libs/util';
 const config = jsonfile.readFileSync('./config.json');
 
 const app = express();
-app.get('/', (req, res) => {
+app.use(express.static(`${__dirname}/assets`));
+
+app.use((req, res) => {
   let reqKeys = Object.keys(req.headers);
   reqKeys.sort();
 
   const reqEntries = (
-    <table>
-      <thead>
-        <tr>
-          <th>Header</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-       { reqKeys.map((item, i) => (<tr key={i}><td>{item}</td><td>{req.headers[item]}</td></tr>)) }
-      </tbody>
-    </table>
+    <div id="wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th className="key">req.header</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+         { reqKeys.map((item, i) => (<tr key={i} className="key"><td>{item}</td><td>{req.headers[item]}</td></tr>)) }
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th>req prop</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="key">httpVersion</td>
+            <td>{req.httpVersion}</td>
+          </tr>
+          <tr>
+            <td className="key">method</td>
+            <td>{req.method}</td>
+          </tr>
+          <tr>
+            <td className="key">params</td>
+            <td>{JSON.stringify(req.params)}</td>
+          </tr>
+          <tr>
+            <td className="key">query</td>
+            <td>{JSON.stringify(req.query)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 
-  res.send(util.toHtml(<div>{reqEntries}</div>));
+  res.send(util.toHtml(reqEntries));
 });
 
 console.log(`Listening on port ${config.port}...`);
